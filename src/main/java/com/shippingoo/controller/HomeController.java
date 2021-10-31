@@ -48,13 +48,20 @@ public class HomeController {
 
     @RequestMapping("/")
     public String index() {
-        return "index";
+
+        return "index-2";
     }
 
     @RequestMapping("/login")
     public String login(Model model) {
-        model.addAttribute("classActiveLogin", true);
-        return "myAccount";
+        //model.addAttribute("classActiveLogin", true);
+        return "pages-login";
+    }
+
+    @RequestMapping("/registration")
+    public String register(Model model) {
+        //model.addAttribute("classActiveLogin", true);
+        return "pages-register";
     }
 
     @RequestMapping("/forgetPassword")
@@ -78,13 +85,13 @@ public class HomeController {
         if (userService.findByUsername(username) != null) {
             model.addAttribute("usernameExists", true);
 
-            return "myAccount";
+            return "pages-register";
         }
 
         if (userService.findByEmail(userEmail) != null) {
-            model.addAttribute("email", true);
+            model.addAttribute("emailExists", true);
 
-            return "myAccount";
+            return "pages-register";
         }
 
         User user = new User();
@@ -114,7 +121,7 @@ public class HomeController {
 
         model.addAttribute("emailSent", "true");
 
-        return "myAccount";
+        return "pages-register";
     }
 
 
