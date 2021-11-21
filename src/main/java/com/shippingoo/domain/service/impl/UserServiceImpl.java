@@ -2,6 +2,7 @@ package com.shippingoo.domain.service.impl;
 
 import com.shippingoo.domain.User;
 import com.shippingoo.domain.security.PasswordResetToken;
+import com.shippingoo.domain.security.Role;
 import com.shippingoo.domain.security.UserRole;
 import com.shippingoo.domain.service.UserService;
 import com.shippingoo.repository.PasswordResetTokenRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 @Service
@@ -39,7 +41,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
+  /*  @Override
     @Transactional
     public User createUser(User user, Set<UserRole> userRoles) throws Exception {
         User localUser = userRepository.findByUsername(user.getUsername());
@@ -82,5 +83,26 @@ public class UserServiceImpl implements UserService {
         }
         return localUser;
 
+    }*/
+
+
+    @Override
+    @Transactional
+    public User createUser(User user, Set<Role> roles) {
+        User localUser = userRepository.findByUsername(user.getUsername());
+
+        if (localUser != null) {
+            LOG.info("user {} already exists. Nothing will be done.", user.getUsername());
+        } else {
+            for (Role role : roles) {
+                roleRepository.save(role);
+                user.getRoles().add(role);
+            }
+
+
+            localUser = userRepository.save(user);
+        }
+
+        return localUser;
     }
 }

@@ -2,6 +2,7 @@ package com.shippingoo.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shippingoo.domain.security.Role;
 import com.shippingoo.domain.security.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id",nullable=false, updatable=false)
     private Long id;
-    
+    @Column(name ="username", nullable = false,updatable = false)
     private String username;
     private String password;
     private String firstName;
@@ -29,12 +31,24 @@ public class User implements UserDetails {
     private String phone;
    private boolean enabled=true;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+    private List<PostRequest> postRequests;
+
     @Transient
     private MultipartFile photo;
+
+
+
+/*
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
    private Set <UserRole> userRoles = new HashSet<>();
+*/
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles = new HashSet<>();
 
 
     @Override
@@ -61,7 +75,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Set <SimpleGrantedAuthority> authorities=new HashSet<>();
-        userRoles.forEach(ur-> authorities.add(new SimpleGrantedAuthority(ur.getRole().getName())));
+        roles.forEach(role-> authorities.add(new SimpleGrantedAuthority(role.getName())));
         return null;
     }
 
@@ -144,12 +158,20 @@ public class User implements UserDetails {
         this.photo = photo;
     }
 
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public List<PostRequest> getPostRequests() {
+        return postRequests;
+    }
+
+    public void setPostRequests(List<PostRequest> postRequests) {
+        this.postRequests = postRequests;
     }
 
     @Override
@@ -164,10 +186,7 @@ public class User implements UserDetails {
                 ", phone='" + phone + '\'' +
                 ", enabled=" + enabled +
                 ", photo=" + photo +
-                ", userRoles=" + userRoles +
+                ", roles=" + roles +
                 '}';
-
-}
-
-
+    }
 }

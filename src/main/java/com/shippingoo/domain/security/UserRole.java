@@ -4,19 +4,21 @@ import com.shippingoo.domain.User;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="user_role")
+//@Entity
+//@Table(name="user_role")
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long userRoleId;
-    @ManyToOne( fetch = FetchType.EAGER)
+    //@ManyToOne( fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    //@ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -52,12 +54,5 @@ public class UserRole {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "UserRole{" +
-                "userRoleId=" + userRoleId +
-                ", user=" + user +
-                ", role=" + role +
-                '}';
-    }
+
 }

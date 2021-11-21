@@ -21,11 +21,14 @@ public class MailConstructor {
 
 public SimpleMailMessage constructResetTokenEmail(String contextPath,Locale locale, String token, User user, String password ){
     String url= contextPath + "/newUser?token="+token;
-    String message ="\nPlease  click on this link to verify your email and edit your personal information. Your password is:\n"+password;
+    String message ="\n \nBonjour,\n \nVeuillez valider votre inscription sur la plateforme CuisineMenageChezVous.fr en cliquant sur " +
+            "le lien ci-dessous. " +
+            "\n \n Merci de votre confiance.\n \n L'Equipe CuisineMenageChezVous \n \n" ;
+
     SimpleMailMessage email = new SimpleMailMessage();
 email.setTo(user.getEmail());
-email.setSubject("Helper-New User");
-email.setText(url+message);
+email.setSubject("CuisineMenageChezVous-Validez votre inscription");
+email.setText(message+url);
 email.setFrom(env.getProperty("support.email"));
 
 return email;

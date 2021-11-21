@@ -1,136 +1,210 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="common/header :: common-header" />
+<!doctype html>
+<html lang="en" ang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:replace="common/header :: common-header"></head>
 
 
+<!-- Wrapper -->
+<body id="wrapper">
 
-<body>
-<div th:replace="common/header :: navbar" />
+<!-- Header Container
+================================================== -->
+<header id="header-container" class="fullwidth" th:replace="common/header :: navbar"></header>
 
-<div class="container">
-    <div class="row" style="margin-bottom: 20px;">
-        <div class="col-xs-8">
-            <h2 style="margin-top: 110px;" class="section-headline">
-                <span>Compte utilisateur</span>
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+<div class="container p-5">
 
-            </h2>
-        </div>
 
-    </div>
+    <ul class="nav nav-pills mb-3" id="myTab" role="tablist">
 
-    <div class="row" style="margin-top: 90px;">
-        <div class="col-xs-9 col-xs-offset-3">
 
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs">
-                <li class="nav-item" th:classappend="${classActiveNewAccount}? 'active'"><a class="nav-link"
-                        href="#tab-1" id="newAccount" aria-controls="newAccount" aria-selected="false" data-toggle="tab"><span style="color: red;">Create account</span></a></li>
+        <li class="nav-item " th:classappend="${classActiveLogin}? 'active'" role="presentation">
+            <button class="nav-link " id="login-tab" data-bs-toggle="tab" data-bs-target="#tab-2"
+                    type="button" role="tab" aria-controls="tab2" aria-selected="false">Se connecter
+            </button>
+        </li>
 
-                <!--          <li class="nav-item active" th:classappend="${classActiveLogin}? 'active'"><a class="nav-link"
-                                 href="#tab-2" data-toggle="tab" aria-selected="true" id="login" aria-controls="tab-2"><span style="color: red;">Login </span></a></li>-->
+        <li class="nav-item" th:classappend="${classActiveNewAccount}? 'active'" role="presentation">
+            <button class="nav-link " id="newAccount-tab" data-bs-toggle="tab"
+                    data-bs-target="#tab-1" type="button" role="tab" aria-controls="tab1" aria-selected="true">
+                S'inscrire
+            </button>
+        </li>
 
-                         <li class="nav-item" th:classappend="${classActiveForgetPassword}? 'active'"><a class="nav-link"
-                                 href="#tab-3" id="forgotPassword"  aria-selected="false" data-toggle="tab"><span style="color: red;">Forgot password </span></a></li>
-                     </ul>
+        <li class="nav-item" th:classappend="${classActiveForgetPassword}? 'active'" role="presentation">
+            <button class="nav-link" id="forgetPassword-tab" data-bs-toggle="tab" data-bs-target="#tab-3"
+                    type="button" role="tab" aria-controls="tab3" aria-selected="false">Mot de passe oublié
+            </button>
+        </li>
+    </ul>
 
-                   <!--   Tab panels -->
-            <div class="tab-content" id="tab-contents">
+    <!-- create new user pane -->
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show" th:classappend="${classActiveNewAccount}? 'in active'"
+             id="tab-1" role="tabpanel" aria-labelledby="home-tab">
+            <div class="alert alert-info mt-3" th:if="${emailSent}">Un email de confirmation vient de vous être envoyé..
+                Vérifiez dans vos spams (courriers indésirables). Merci de votre confiance !
 
-                <!-- create new user pane -->
-                <div class="tab-pane fade show active" id="tab-1" role="tabpanel"
-                     th:classappend="${classActiveNewAccount}? 'in active'">
-
-                                <div class="alert alert-info" th:if="${emailSent}">An email it's sent to you, please verify your emailS
-                                   </div>
-                                <form th:action="@{/newUser}" method="post">
-                                    <div class="form-group">
-                                        <label for="newUsername">* Identifiant: </label>&nbsp;<span
-                                            style="color: red;" th:if="${usernameExists}">L'identiant
-												existe déja. Choisissez un autre identifiant.</span> <input
-                                            required="required" type="text" class="form-control"
-                                            id="newUsername" name="username" />
-                                        <p style="color: #828282">Saisissez votre identifiant.</p>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="email">* Email: </label><span style="color: red;"
-                                                                                  th:if="${emailExists}"> L'adresse email existe déja.
-												Choisissez un autre.</span> <input required="required" type="text"
-                                                                                   class="form-control" id="email" name="email" />
-                                        <p style="color: #828282">Une adresse e-mail
-                                            valide.L'adresse e-mail n'est pas rendue publique et ne sera
-                                            utilisée que si vous souhaitez recevoir un nouveau mot de
-                                            passe ou pour recevoir certaine notifications.</p>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary">Créer
-                                        un compte</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- log in -->
-                <div class="tab-pane fade" id="tab-2"
-                     th:classappend="${classActiveLogin}? 'in active'">
-                    <div class="panel-group">
-                        <div class="panel panel-default" style="border: none;">
-                            <div class="panel-body"
-                                 style="background-color: #ededed; margin-top: 20px;">
-                                <div th:if="${param.error != null}" style="color: red;">Identifiant
-                                    ou mot de passe incorrect.</div>
-                                <form th:action="@{/login}" method="post">
-                                    <div class="form-group">
-                                        <label for="username">* Identifiant: </label> <input
-                                            required="required" type="text" class="form-control"
-                                            id="username" name="username" />
-                                        <p style="color: #828282">Saisissez votre identifiant.</p>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="password">* Mot de passe: </label> <input
-                                            required="required" type="password" class="form-control"
-                                            id="password" name="password" />
-                                        <p style="color: #828282">Saisissez votre mot de passe.</p>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary">Se
-                                        connecter</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- forget password -->
-                <div class="tab-pane fade" id="tab-3"
-                     th:classappend="${classActiveForgetPassword}? 'in active'">
-                    <div class="panel-group">
-                        <div class="panel panel-default" style="border: none;">
-                            <div class="panel-body"
-                                 style="background-color: #ededed; margin-top: 20px;">
-                                <div th:if="${emailNotExist}" class="alert alert-danger">L'email
-                                    n'existe pas.</div>
-                                <div th:if="${forgetPasswordEmailSent}"
-                                     class="alert alert-success">L'email a été envoyé.</div>
-                                <form th:action="@{/forgetPassword}" method="post">
-                                    <div class="form-group">
-                                        <label for="recoverEmail">* Votre email: </label> <input
-                                            required="required" type="text" class="form-control"
-                                            id="recoverEmail" name="email" />
-                                        <p style="color: #828282">Saisissez votre adresse email.</p>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary">Valider</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+            <form th:action="@{/newUser}" method="post">
+
+
+
+<div class=" p-2 border border-warning">
+    <p class="lead text-dark">Cochez votre profile:</p>
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" name="roleName"  value="ROLE_USER"  id="isJobber" required="required">
+                    <label class="form-check-label" for="isJobber">
+                    Posteur : vous avez besoin de quelqu'un pour faire le ménage ou la cuisine chez vous
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="roleName" value="ROLE_EMPLOYER"  id="isNotJobber" required="required">
+                    <label class="form-check-label" for="isNotJobber">
+                        Prestataire : vous voulez proposer vos services de cuisine ou ménage à domicile
+                    </label>
+                </div>
+
+        </div>
+                <div class="form-group">
+
+                    <div class="alert alert-danger" th:if="${usernameExists}">Cet identifiant existe dejà.</div>
+
+
+                    <input required="required" type="text" class="form-control border border-primary bg-light"
+                           id="newUsername" name="username" placeholder="Votre identifiant"/>
+                    <p style="color: #828282">* Saisissez votre identifiant.</p>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="alert alert-warning" th:if="${emailExists}">Cet email existe dejà.
+                    </div>
+                    <input required="required" type="text" class="form-control border border-primary bg-light"
+                           id="email" name="email" placeholder="Votre email"/>
+                    <p>* Saisissez un email valide.</p>
+                </div>
+
+                <button type="submit" class="btn btn-success">Créer un compte </button>
+
+            </form>
+        </div>
+
+
+        <!-- log in -->
+        <div class="tab-pane fade show" th:classappend="${classActiveLogin}? 'in active'"
+             id="tab-2" role="tabpanel" aria-labelledby="profile-tab">
+
+            <div class="alert alert-warning mt-3" th:if="${param.error != null}">Votre mot de passe ou votre identifiant est incorrect.</div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <input required="required" type="text" class="form-control border border-primary bg-light"
+                           id="username" name="username" placeholder="Identifiant"/>
+                    <p style="color: #828282">* Votre identifiant.</p>
+                </div>
+
+                <div class="form-group">
+                    <input required="required" type="password" class="form-control border border-primary bg-light"
+                           id="password" name="password" placeholder="Mot de passe"/>
+                    <p style="color: #828282">* Votre mot de passe</p>
+                </div>
+
+                <button type="submit" class="btn btn-success">Se connecter</button>
+            </form>
+        </div>
+
+
+        <!-- forget password -->
+        <div class="tab-pane fade show" th:classappend="${classActiveForgetPassword}? 'active'"
+             id="tab-3" role="tabpanel" aria-labelledby="contact-tab">
+
+            <div th:if="${emailNotExist}" class="alert alert-danger">L'Email n'existe pas.</div>
+            <div th:if="${forgetPasswordEmailSent}" class="alert alert-success">L'email de réinitialisation vous a été envoyé!</div>
+            <form th:action="@{/forgetPassword}" method="post">
+                <div class="form-group">
+
+                    <input required="required" type="text" class="form-control border border-primary bg-light"
+                           id="recoverEmail" name="email" placeholder="Email"/>
+                    <p style="color: #828282">* Sassisez votre email pour récupérer votre compte.</p>
+                </div>
+
+                <button type="submit" class="btn btn-success">Valider</button>
+            </form>
+
         </div>
     </div>
+
+
 </div>
+
+<!-- Footer
+================================================== -->
+<div id="footer" th:replace="common/header :: footer"></div>
+
+
+<!-- Scripts
+================================================== -->
+<script src="js/jquery-3.6.0.min.js"></script>
+<script src="js/jquery-migrate-3.3.2.min.js"></script>
+<script src="js/mmenu.min.js"></script>
+<script src="js/tippy.all.min.js"></script>
+<script src="js/simplebar.min.js"></script>
+<script src="js/bootstrap-slider.min.js"></script>
+<script src="js/bootstrap-select.min.js"></script>
+<script src="js/snackbar.js"></script>
+<script src="js/clipboard.min.js"></script>
+<script src="js/counterup.min.js"></script>
+<script src="js/magnific-popup.min.js"></script>
+<script src="js/slick.min.js"></script>
+<script src="js/custom.js"></script>
+
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+    // Snackbar for user status switcher
+    $('#snackbar-user-status label').click(function () {
+        Snackbar.show({
+            text: 'Your status has been changed!',
+            pos: 'bottom-center',
+            showAction: false,
+            actionText: "Dismiss",
+            duration: 3000,
+            textColor: '#fff',
+            backgroundColor: '#383838'
+        });
+    });
+</script>
+
+
+<!-- Google Autocomplete -->
+<script>
+    function initAutocomplete() {
+        var options = {
+            types: ['(cities)'],
+            // componentRestrictions: {country: "us"}
+        };
+
+        var input = document.getElementById('autocomplete-input');
+        var autocomplete = new google.maps.places.Autocomplete(input, options);
+    }
+
+    // Autocomplete adjustment for homepage
+    if ($('.intro-banner-search-form')[0]) {
+        setTimeout(function () {
+            $(".pac-container").prependTo(".intro-search-field.with-autocomplete");
+        }, 300);
+    }
+
+</script>
+
+<!-- Google API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=initAutocomplete"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
 </body>
+
+
 </html>

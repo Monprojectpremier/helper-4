@@ -8,11 +8,14 @@ import java.util.Set;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
+    @Column(name = "ROLE_ID")
     private int roleId;
+
+    @Column(name="ROLE_NAME")
     private String name;
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserRole> userRoles = new HashSet<>();
+
+  //  @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   // private Set<UserRole> userRoles = new HashSet<>();
 
 
     public Role() {
@@ -38,20 +41,13 @@ public class Role {
         this.name = name;
     }
 
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
+   // public Set<UserRole> getUserRoles() {
+   //     return userRoles;
+   // }
 
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
+    //public void setUserRoles(Set<UserRole> userRoles) {
+    //    this.userRoles = userRoles;
+  //  }
 
-    @Override
-    public String toString() {
-        return "Role{" +
-                "roleId=" + roleId +
-                ", name='" + name + '\'' +
-                ", userRoles=" + userRoles +
-                '}';
-    }
+
 }
